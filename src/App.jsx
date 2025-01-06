@@ -152,22 +152,22 @@ export default function MiningStore() {
 
   useEffect(() => {
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 640)
+      setIsMobile(window.innerWidth < 740)
     }
     
-    // Initial check
     checkMobile()
-    
-    // Add event listener
     window.addEventListener('resize', checkMobile)
-    
-    // Cleanup
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
   const getVisibleItems = () => {
     if (isMobile) return 1
     return window.innerWidth < 1024 ? 2 : 3
+  }
+
+  const getSlidePercentage = () => {
+    if (isMobile) return 21.5
+    return window.innerWidth < 1024 ? 50 : 33.33
   }
 
   const next = () => {
@@ -255,15 +255,15 @@ export default function MiningStore() {
             <div 
               className="flex transition-transform duration-300 ease-in-out"
               style={{ 
-                transform: `translateX(-${activeIndex * (100 / getVisibleItems())}%)`,
-                width: `${(100 * products.length) / getVisibleItems()}%`
+                transform: `translateX(-${activeIndex * getSlidePercentage()}%)`,
+                width: isMobile ? `${products.length * 100}%` : `${(100 * products.length) / getVisibleItems()}%`
               }}
             >
-              {products.map((product, idx) => (
+              {products.map((product) => (
                 <div 
                   key={product.name}
                   className="p-2 sm:p-4"
-                  style={{ width: `${100 / getVisibleItems()}%` }}
+                  style={{ width: isMobile ? `${100 / products.length}%` : `${100 / getVisibleItems()}%` }}
                 >
                   <div className="bg-purple-900/40 p-4 sm:p-6 rounded-xl hover:bg-purple-900/60 transition-colors cursor-pointer">
                     <img 
